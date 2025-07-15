@@ -306,7 +306,16 @@ export const PledgeWall = () => {
             <Button 
               variant="nature" 
               size="lg"
-              onClick={() => document.getElementById('pledge-form')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => {
+                // Try to find pledge form first, if not found scroll to top and reload
+                const pledgeForm = document.getElementById('pledge-form');
+                if (pledgeForm) {
+                  pledgeForm.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                  // If certificate is shown, reload page to show form again
+                  window.location.reload();
+                }
+              }}
             >
               Join the Wall
             </Button>
