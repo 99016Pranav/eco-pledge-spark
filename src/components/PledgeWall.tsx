@@ -17,8 +17,8 @@ interface Pledge {
 export const PledgeWall = () => {
   const [pledges, setPledges] = useState<Pledge[]>([]);
   const [filteredPledges, setFilteredPledges] = useState<Pledge[]>([]);
-  const [stateFilter, setStateFilter] = useState<string>("");
-  const [profileFilter, setProfileFilter] = useState<string>("");
+  const [stateFilter, setStateFilter] = useState<string>("all-states");
+  const [profileFilter, setProfileFilter] = useState<string>("all-profiles");
 
   // Sample data - in a real app, this would come from a database
   useEffect(() => {
@@ -104,11 +104,11 @@ export const PledgeWall = () => {
   useEffect(() => {
     let filtered = pledges;
 
-    if (stateFilter) {
+    if (stateFilter && stateFilter !== "all-states") {
       filtered = filtered.filter(pledge => pledge.state === stateFilter);
     }
 
-    if (profileFilter) {
+    if (profileFilter && profileFilter !== "all-profiles") {
       filtered = filtered.filter(pledge => pledge.profile === profileFilter);
     }
 
@@ -163,7 +163,7 @@ export const PledgeWall = () => {
                 <SelectValue placeholder="Filter by state" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All States</SelectItem>
+                <SelectItem value="all-states">All States</SelectItem>
                 {uniqueStates.map(state => (
                   <SelectItem key={state} value={state}>{state}</SelectItem>
                 ))}
@@ -177,7 +177,7 @@ export const PledgeWall = () => {
                 <SelectValue placeholder="Filter by profile" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Profiles</SelectItem>
+                <SelectItem value="all-profiles">All Profiles</SelectItem>
                 {uniqueProfiles.map(profile => (
                   <SelectItem key={profile} value={profile}>{profile}</SelectItem>
                 ))}
@@ -185,19 +185,19 @@ export const PledgeWall = () => {
             </Select>
           </div>
 
-          {(stateFilter || profileFilter) && (
+          {(stateFilter && stateFilter !== "all-states") || (profileFilter && profileFilter !== "all-profiles") ? (
             <Button 
               variant="outline" 
               onClick={() => {
-                setStateFilter("");
-                setProfileFilter("");
+                setStateFilter("all-states");
+                setProfileFilter("all-profiles");
               }}
               className="gap-2"
             >
               <Filter className="w-4 h-4" />
               Clear
             </Button>
-          )}
+          ) : null}
         </div>
 
         {/* Stats Summary */}
@@ -283,8 +283,8 @@ export const PledgeWall = () => {
             <Button 
               variant="outline" 
               onClick={() => {
-                setStateFilter("");
-                setProfileFilter("");
+                setStateFilter("all-states");
+                setProfileFilter("all-profiles");
               }}
               className="mt-4"
             >
